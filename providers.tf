@@ -33,3 +33,9 @@ provider "aws" {
     }
   }
 }
+
+# Management account — domain registrar (no assume_role, uses OIDC role directly).
+provider "aws" {
+  alias  = "management"
+  region = "us-east-1"
+}

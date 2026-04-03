@@ -97,7 +97,9 @@ flowchart TD
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 6.27 |
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_aws.management"></a> [aws.management](#provider\_aws.management) | 6.39.0 |
 ## Modules
 
 | Name | Source | Version |
