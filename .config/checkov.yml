@@ -17,9 +17,30 @@ skip-check:
   - CKV_AWS_356 # CloudFront invalidation does not support resource-level ARNs.
 
   ############################
+  # S3
+  ############################
+
+  - CKV2_AWS_65 # Logs bucket needs BucketOwnerPreferred for CloudFront standard logging ACLs.
+  - CKV_AWS_21  # Content deployed from git (source of truth); logs have lifecycle expiration.
+  - CKV_AWS_144 # Single-region personal site — cross-region replication is overkill.
+  - CKV2_AWS_62 # Static site buckets don't need event notifications.
+  - CKV_AWS_145 # Default SSE-S3 is sufficient for a public static site.
+  - CKV_AWS_18  # Content bucket logged via CloudFront; logs bucket doesn't need logging.
+  - CKV2_AWS_61 # Content bucket managed by deploy pipeline; logs bucket already has lifecycle.
+
+  ############################
   # CloudFront
   ############################
 
   - CKV_AWS_68  # WAF adds $5/month minimum — overkill for a personal static site.
   - CKV_AWS_310 # Origin failover: single S3 origin, no second origin to fail over to.
   - CKV_AWS_374 # Geo restriction: personal portfolio should be globally accessible.
+  - CKV2_AWS_32 # Security headers applied via CloudFront Functions, not a response headers policy.
+  - CKV2_AWS_47 # WAF already skipped (CKV_AWS_68) — Log4j AMR check is moot without WAF.
+
+  ############################
+  # Route 53
+  ############################
+
+  - CKV2_AWS_38 # DNSSEC requires a KMS key in us-east-1 — overkill for a personal site.
+  - CKV2_AWS_39 # DNS query logging requires CloudWatch log group — unnecessary for personal site.
