@@ -12,5 +12,9 @@ function handler(event) {
     };
   }
 
+  if (request.uri.endsWith('/')) {
+    request.uri += 'index.html';
+  }
+
   return request;
 }
