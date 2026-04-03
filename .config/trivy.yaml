@@ -1,0 +1,15 @@
+---
+# Suppress verbose output in automated environments.
+quiet: true
+
+# Only report HIGH and CRITICAL findings, consistent with checkov.yml policy.
+severity:
+  - HIGH
+  - CRITICAL
+
+scan:
+  # Scope Trivy to vulnerability and secret detection.
+  # IaC misconfiguration checks are delegated to Checkov.
+  scanners:
+    - vuln
+    - secret

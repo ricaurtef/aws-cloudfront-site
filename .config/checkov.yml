@@ -1,0 +1,25 @@
+---
+# Suppress verbose output in automated environments.
+quiet: true
+
+# Allow LOW and MEDIUM severity findings to pass (non-blocking).
+# Only HIGH and CRITICAL findings will fail the pipeline.
+soft-fail-on:
+  - LOW
+  - MEDIUM
+
+skip-check:
+  ############################
+  # IAM
+  ############################
+
+  - CKV_AWS_111 # CloudFront invalidation does not support resource-level ARNs.
+  - CKV_AWS_356 # CloudFront invalidation does not support resource-level ARNs.
+
+  ############################
+  # CloudFront
+  ############################
+
+  - CKV_AWS_68  # WAF adds $5/month minimum — overkill for a personal static site.
+  - CKV_AWS_310 # Origin failover: single S3 origin, no second origin to fail over to.
+  - CKV_AWS_374 # Geo restriction: personal portfolio should be globally accessible.

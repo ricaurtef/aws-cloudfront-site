@@ -1,0 +1,12 @@
+terraform.tfvars
+.terraform/*
+terraform.tfstate*
+
+# Local .terraform directories
+**/.terraform/*
+
+# Terraform lock file (recreated on the runner)
+.terraform.lock.hcl
+
+# Claude Code
+CLAUDE.md

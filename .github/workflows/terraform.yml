@@ -1,0 +1,182 @@
+name: Terraform
+
+on:
+  pull_request:
+    paths:
+      - "*.tf"
+      - "modules/**"
+      - "env/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "*.tf"
+      - "modules/**"
+      - "env/**"
+
+permissions:
+  contents: write
+  id-token: write
+  pull-requests: write
+
+env:
+  TF_BACKEND_BUCKET: ricaurtef-terraform-state
+  TF_BACKEND_KEY: personal/us-east-1/cloudfront-site/terraform.tfstate
+  TF_BACKEND_REGION: us-east-1
+  TF_VAR_FILE: env/production.tfvars
+
+jobs:
+  check:
+    name: Check formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~> 1.14"
+
+      - name: Check
+        run: make check
+
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~> 1.14"
+
+      - name: Validate
+        run: make validate
+
+  tflint:
+    name: TFLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: latest
+
+      - name: Init TFLint
+        run: tflint --init --config .config/tflint.hcl
+
+      - name: Lint
+        run: make tflint
+
+  security:
+    name: Security scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install Checkov
+        run: pip install checkov
+
+      - name: Install Trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
+
+      - name: Security
+        run: make security
+
+  plan:
+    name: Plan
+    if: github.event_name == 'pull_request'
+    needs: [check, validate, tflint, security]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~> 1.14"
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Init
+        run: |
+          terraform init \
+            -backend-config="bucket=$TF_BACKEND_BUCKET" \
+            -backend-config="key=$TF_BACKEND_KEY" \
+            -backend-config="region=$TF_BACKEND_REGION" \
+            -backend-config="encrypt=true" \
+            -backend-config="use_lockfile=true"
+
+      - name: Plan
+        run: terraform plan -no-color -var-file="$TF_VAR_FILE"
+
+  deploy:
+    name: Deploy
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [check, validate, tflint, security]
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~> 1.14"
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Init
+        run: |
+          terraform init \
+            -backend-config="bucket=$TF_BACKEND_BUCKET" \
+            -backend-config="key=$TF_BACKEND_KEY" \
+            -backend-config="region=$TF_BACKEND_REGION" \
+            -backend-config="encrypt=true" \
+            -backend-config="use_lockfile=true"
+
+      - name: Plan
+        run: terraform plan -var-file="$TF_VAR_FILE" -out=tfplan
+
+      - name: Apply
+        run: terraform apply tfplan
+
+  release:
+    name: Release
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Compute next version
+        id: version
+        run: |
+          git fetch --tags
+          LATEST=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1 || true)
+
+          if [[ -z "$LATEST" ]]; then
+            NEXT="v1.0.0"
+          else
+            MAJOR=$(echo "$LATEST" | cut -d. -f1 | tr -d v)
+            MINOR=$(echo "$LATEST" | cut -d. -f2)
+            PATCH=$(echo "$LATEST" | cut -d. -f3)
+            NEXT="v${MAJOR}.${MINOR}.$((PATCH+1))"
+          fi
+
+          echo "tag=$NEXT" >> "$GITHUB_OUTPUT"
+
+      - name: Create release
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" \
+            --title "${{ steps.version.outputs.tag }}" \
+            --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
