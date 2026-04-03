@@ -6,6 +6,8 @@ on:
       - "*.tf"
       - "modules/**"
       - "env/**"
+      - ".config/**"
+      - ".github/workflows/**"
   push:
     branches:
       - main
@@ -13,6 +15,8 @@ on:
       - "*.tf"
       - "modules/**"
       - "env/**"
+      - ".config/**"
+      - ".github/workflows/**"
 
 permissions:
   contents: write
