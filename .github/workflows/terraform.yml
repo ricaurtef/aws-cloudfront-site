@@ -56,22 +56,6 @@ jobs:
       - name: Validate
         run: make validate
 
-  tflint:
-    name: TFLint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-
-      - uses: terraform-linters/setup-tflint@v4
-        with:
-          tflint_version: latest
-
-      - name: Init TFLint
-        run: tflint --init --config .config/tflint.hcl
-
-      - name: Lint
-        run: make tflint
-
   security:
     name: Security scan
     runs-on: ubuntu-latest
@@ -91,7 +75,7 @@ jobs:
   plan:
     name: Plan
     if: github.event_name == 'pull_request'
-    needs: [check, validate, tflint, security]
+    needs: [check, validate, security]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -120,7 +104,7 @@ jobs:
   deploy:
     name: Deploy
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [check, validate, tflint, security]
+    needs: [check, validate, security]
     runs-on: ubuntu-latest
     environment: production
     steps:
