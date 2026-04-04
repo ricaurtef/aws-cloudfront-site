@@ -113,6 +113,7 @@ flowchart TD
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Apex domain name. | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Deployment environment (e.g., production, staging). | `string` | n/a | yes |
 | <a name="input_google_site_verification"></a> [google\_site\_verification](#input\_google\_site\_verification) | Google Search Console DNS verification token. | `string` | n/a | yes |
+| <a name="input_preview_bucket_name"></a> [preview\_bucket\_name](#input\_preview\_bucket\_name) | Name of the S3 bucket for preview site content. | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS region for primary resources. | `string` | n/a | yes |
 | <a name="input_site_bucket_name"></a> [site\_bucket\_name](#input\_site\_bucket\_name) | Name of the S3 bucket for site content. | `string` | n/a | yes |
 ## Outputs
@@ -121,5 +122,7 @@ flowchart TD
 |------|-------------|
 | <a name="output_cloudfront_distribution_id"></a> [cloudfront\_distribution\_id](#output\_cloudfront\_distribution\_id) | CloudFront distribution ID (used for cache invalidation). |
 | <a name="output_name_servers"></a> [name\_servers](#output\_name\_servers) | NS records to configure in the management account for DNS delegation. |
+| <a name="output_preview_cloudfront_distribution_id"></a> [preview\_cloudfront\_distribution\_id](#output\_preview\_cloudfront\_distribution\_id) | Preview CloudFront distribution ID (used for cache invalidation). |
+| <a name="output_preview_site_url"></a> [preview\_site\_url](#output\_preview\_site\_url) | Public URL of the preview site. |
 | <a name="output_site_url"></a> [site\_url](#output\_site\_url) | Public URL of the site. |
 <!-- END_TF_DOCS -->

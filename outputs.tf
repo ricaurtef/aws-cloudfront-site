@@ -24,3 +24,17 @@ output "name_servers" {
   description = "NS records to configure in the management account for DNS delegation."
   value       = aws_route53_zone.this.name_servers
 }
+
+############################
+# Preview
+############################
+
+output "preview_cloudfront_distribution_id" {
+  description = "Preview CloudFront distribution ID (used for cache invalidation)."
+  value       = aws_cloudfront_distribution.preview.id
+}
+
+output "preview_site_url" {
+  description = "Public URL of the preview site."
+  value       = "https://preview.${var.domain_name}"
+}
