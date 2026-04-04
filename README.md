@@ -99,6 +99,7 @@ flowchart TD
 
 | Name | Version |
 |------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.39.0 |
 | <a name="provider_aws.management"></a> [aws.management](#provider\_aws.management) | 6.39.0 |
 ## Modules
 
@@ -112,6 +113,7 @@ flowchart TD
 | <a name="input_deploy_role_arn"></a> [deploy\_role\_arn](#input\_deploy\_role\_arn) | ARN of the IAM role to assume for deploying resources (hub-and-spoke). | `string` | n/a | yes |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Apex domain name. | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Deployment environment (e.g., production, staging). | `string` | n/a | yes |
+| <a name="input_google_site_verification"></a> [google\_site\_verification](#input\_google\_site\_verification) | Google Search Console DNS verification token. | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS region for primary resources. | `string` | n/a | yes |
 | <a name="input_site_bucket_name"></a> [site\_bucket\_name](#input\_site\_bucket\_name) | Name of the S3 bucket for site content. | `string` | n/a | yes |
 ## Outputs
