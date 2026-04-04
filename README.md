@@ -5,7 +5,6 @@
 ![ci](https://img.shields.io/github/actions/workflow/status/ricaurtef/aws-cloudfront-site/terraform.yml?label=ci&color=83a598)
 ![terraform](https://img.shields.io/badge/terraform-~%3E1.14-623CE4?logo=terraform&logoColor=white)
 ![aws provider](https://img.shields.io/badge/aws_provider-~%3E6.27-232F3E?logo=amazonaws&logoColor=white)
-![license](https://img.shields.io/github/license/ricaurtef/aws-cloudfront-site?color=83a598)
 
 ---
 
@@ -104,7 +103,9 @@ flowchart TD
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 6.39.0 |
 | <a name="provider_aws.management"></a> [aws.management](#provider\_aws.management) | 6.39.0 |
 | <a name="provider_aws.us_east_1"></a> [aws.us\_east\_1](#provider\_aws.us\_east\_1) | 6.39.0 |
+## Modules
 
+No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
