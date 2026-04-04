@@ -69,3 +69,13 @@ variable "site_bucket_name" {
     error_message = "Must be a valid S3 bucket name (lowercase, 3-63 chars, no underscores)."
   }
 }
+
+variable "preview_bucket_name" {
+  description = "Name of the S3 bucket for preview site content."
+  type        = string
+
+  validation {
+    condition     = can(regex("^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$", var.preview_bucket_name))
+    error_message = "Must be a valid S3 bucket name (lowercase, 3-63 chars, no underscores)."
+  }
+}
