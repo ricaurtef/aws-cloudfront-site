@@ -74,7 +74,6 @@ jobs:
 
   plan:
     name: Plan
-    if: github.event_name == 'pull_request'
     needs: [check, validate, security]
     runs-on: ubuntu-latest
     steps:
@@ -99,14 +98,35 @@ jobs:
             -backend-config="use_lockfile=true"
 
       - name: Plan
-        run: terraform plan -no-color -var-file="$TF_VAR_FILE"
+        run: terraform plan -no-color -var-file="$TF_VAR_FILE" -out=tfplan 2>&1 | tee plan.txt
+
+      - name: Comment PR
+        if: github.event_name == 'pull_request'
+        run: |
+          {
+            echo "### Terraform Plan"
+            echo ""
+            echo '```'
+            head -c 60000 plan.txt
+            echo '```'
+          } > comment.md
+          gh pr comment "$PR_NUMBER" --body-file comment.md
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+
+      - name: Upload plan
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: tfplan
 
   deploy:
     name: Deploy
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [check, validate, security]
+    needs: [plan]
     runs-on: ubuntu-latest
-    environment: production
     steps:
       - uses: actions/checkout@v5
 
@@ -128,8 +148,10 @@ jobs:
             -backend-config="encrypt=true" \
             -backend-config="use_lockfile=true"
 
-      - name: Plan
-        run: terraform plan -var-file="$TF_VAR_FILE" -out=tfplan
+      - name: Download plan
+        uses: actions/download-artifact@v4
+        with:
+          name: tfplan
 
       - name: Apply
         run: terraform apply tfplan
