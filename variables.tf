@@ -50,6 +50,16 @@ variable "domain_name" {
   }
 }
 
+variable "google_site_verification" {
+  description = "Google Search Console DNS verification token."
+  type        = string
+
+  validation {
+    condition     = can(regex("^google-site-verification=", var.google_site_verification))
+    error_message = "Must start with google-site-verification=."
+  }
+}
+
 variable "site_bucket_name" {
   description = "Name of the S3 bucket for site content."
   type        = string
