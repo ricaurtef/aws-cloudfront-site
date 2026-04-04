@@ -5,7 +5,6 @@ repos:
     hooks:
       - id: terraform_fmt
       - id: terraform_validate
-        exclude: '^modules/'
       - id: terraform_tflint
         args:
           - --args=--config=__GIT_WORKING_DIR__/.config/tflint.hcl
