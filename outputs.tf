@@ -4,7 +4,7 @@
 
 output "cloudfront_distribution_id" {
   description = "CloudFront distribution ID (used for cache invalidation)."
-  value       = module.site.cloudfront_distribution_id
+  value       = aws_cloudfront_distribution.this.id
 }
 
 ############################
@@ -13,7 +13,7 @@ output "cloudfront_distribution_id" {
 
 output "site_url" {
   description = "Public URL of the site."
-  value       = module.site.site_url
+  value       = "https://${var.domain_name}"
 }
 
 ############################
@@ -22,5 +22,5 @@ output "site_url" {
 
 output "name_servers" {
   description = "NS records to configure in the management account for DNS delegation."
-  value       = module.site.name_servers
+  value       = aws_route53_zone.this.name_servers
 }

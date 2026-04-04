@@ -36,26 +36,28 @@ flowchart LR
 
 ```
 aws-cloudfront-site/
-├── modules/
-│   └── site/               # S3, CloudFront, ACM, Route 53, CF Functions
-│       └── functions/       # CloudFront Functions (JS)
+├── functions/              # CloudFront Functions (JS)
 ├── env/
 │   └── production.tfvars   # Environment-specific values
 ├── .config/                # Integration tooling configs
 ├── .github/workflows/      # CI/CD pipeline
-├── main.tf                 # Module invocation
+├── s3.tf                   # S3 content + logs buckets
+├── acm.tf                  # ACM certificate + DNS validation
+├── cloudfront.tf           # CloudFront distribution + functions
+├── route53.tf              # DNS zone, alias records, Google verification
+├── cloudwatch.tf           # CloudWatch dashboard
+├── main.tf                 # DNS delegation (management account)
 ├── variables.tf            # Root variables (no defaults — driven by tfvars)
 ├── outputs.tf              # Root outputs
-├── providers.tf            # AWS provider (default + us-east-1 alias)
+├── providers.tf            # AWS providers (default + us-east-1 + management)
 ├── backend.tf              # S3 backend (partial — populated at init time)
 └── versions.tf             # Terraform + provider version constraints
 ```
 
 ## DNS delegation
 
-This project creates a hosted zone in the production account. For DNS to work,
-add the NS records output by `name_servers` to the management account's hosted zone
-(or your domain registrar).
+This project creates a hosted zone in the production account. DNS delegation
+to the management account's registrar is automated via `aws_route53domains_registered_domain`.
 
 ## CI/CD pipeline
 
@@ -101,11 +103,8 @@ flowchart TD
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 6.39.0 |
 | <a name="provider_aws.management"></a> [aws.management](#provider\_aws.management) | 6.39.0 |
-## Modules
+| <a name="provider_aws.us_east_1"></a> [aws.us\_east\_1](#provider\_aws.us\_east\_1) | 6.39.0 |
 
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_site"></a> [site](#module\_site) | ./modules/site | n/a |
 ## Inputs
 
 | Name | Description | Type | Default | Required |

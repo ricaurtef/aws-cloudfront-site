@@ -1,0 +1,69 @@
+############################
+# Route 53 DNS
+############################
+
+resource "aws_route53_zone" "this" {
+  name = var.domain_name
+}
+
+# Apex — A + AAAA alias to CloudFront
+resource "aws_route53_record" "this_apex_a" {
+  zone_id = aws_route53_zone.this.zone_id
+  name    = var.domain_name
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.this.domain_name
+    zone_id                = aws_cloudfront_distribution.this.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "this_apex_aaaa" {
+  zone_id = aws_route53_zone.this.zone_id
+  name    = var.domain_name
+  type    = "AAAA"
+
+  alias {
+    name                   = aws_cloudfront_distribution.this.domain_name
+    zone_id                = aws_cloudfront_distribution.this.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+# www — A + AAAA alias to CloudFront (redirected by CloudFront Function)
+resource "aws_route53_record" "this_www_a" {
+  zone_id = aws_route53_zone.this.zone_id
+  name    = "www.${var.domain_name}"
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.this.domain_name
+    zone_id                = aws_cloudfront_distribution.this.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "this_www_aaaa" {
+  zone_id = aws_route53_zone.this.zone_id
+  name    = "www.${var.domain_name}"
+  type    = "AAAA"
+
+  alias {
+    name                   = aws_cloudfront_distribution.this.domain_name
+    zone_id                = aws_cloudfront_distribution.this.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+############################
+# Google Search Console
+############################
+
+resource "aws_route53_record" "google_verification" {
+  zone_id = aws_route53_zone.this.zone_id
+  name    = var.domain_name
+  type    = "TXT"
+  ttl     = 300
+  records = [var.google_site_verification]
+}
