@@ -4,7 +4,7 @@
 
 output "cloudfront_distribution_id" {
   description = "CloudFront distribution ID (used for cache invalidation)."
-  value       = aws_cloudfront_distribution.this.id
+  value       = aws_cloudfront_distribution.site.id
 }
 
 ############################
@@ -22,7 +22,7 @@ output "site_url" {
 
 output "name_servers" {
   description = "NS records to configure in the management account for DNS delegation."
-  value       = aws_route53_zone.this.name_servers
+  value       = aws_route53_zone.site.name_servers
 }
 
 ############################

@@ -22,7 +22,7 @@ resource "aws_cloudwatch_dashboard" "site" {
           period  = 300
 
           metrics = [
-            ["AWS/CloudFront", "Requests", "DistributionId", aws_cloudfront_distribution.this.id, "Region", "Global"]
+            ["AWS/CloudFront", "Requests", "DistributionId", aws_cloudfront_distribution.site.id, "Region", "Global"]
           ]
         }
       },
@@ -41,7 +41,7 @@ resource "aws_cloudwatch_dashboard" "site" {
           period  = 300
 
           metrics = [
-            ["AWS/CloudFront", "CacheHitRate", "DistributionId", aws_cloudfront_distribution.this.id, "Region", "Global"]
+            ["AWS/CloudFront", "CacheHitRate", "DistributionId", aws_cloudfront_distribution.site.id, "Region", "Global"]
           ]
         }
       },
@@ -60,8 +60,8 @@ resource "aws_cloudwatch_dashboard" "site" {
           period  = 300
 
           metrics = [
-            ["AWS/CloudFront", "4xxErrorRate", "DistributionId", aws_cloudfront_distribution.this.id, "Region", "Global"],
-            ["AWS/CloudFront", "5xxErrorRate", "DistributionId", aws_cloudfront_distribution.this.id, "Region", "Global"]
+            ["AWS/CloudFront", "4xxErrorRate", "DistributionId", aws_cloudfront_distribution.site.id, "Region", "Global"],
+            ["AWS/CloudFront", "5xxErrorRate", "DistributionId", aws_cloudfront_distribution.site.id, "Region", "Global"]
           ]
         }
       },
@@ -80,8 +80,8 @@ resource "aws_cloudwatch_dashboard" "site" {
           period  = 300
 
           metrics = [
-            ["AWS/CloudFront", "BytesDownloaded", "DistributionId", aws_cloudfront_distribution.this.id, "Region", "Global"],
-            ["AWS/CloudFront", "BytesUploaded", "DistributionId", aws_cloudfront_distribution.this.id, "Region", "Global"]
+            ["AWS/CloudFront", "BytesDownloaded", "DistributionId", aws_cloudfront_distribution.site.id, "Region", "Global"],
+            ["AWS/CloudFront", "BytesUploaded", "DistributionId", aws_cloudfront_distribution.site.id, "Region", "Global"]
           ]
         }
       }
