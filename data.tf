@@ -25,11 +25,11 @@ data "aws_iam_policy_document" "preview" {
 # IAM Policy Documents — Production
 ############################
 
-data "aws_iam_policy_document" "this" {
+data "aws_iam_policy_document" "content_bucket" {
   statement {
     sid       = "AllowCloudFrontOAC"
     actions   = ["s3:GetObject"]
-    resources = ["${aws_s3_bucket.this_content.arn}/*"]
+    resources = ["${aws_s3_bucket.content.arn}/*"]
 
     principals {
       type        = "Service"
@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "this" {
     condition {
       test     = "StringEquals"
       variable = "AWS:SourceArn"
-      values   = [aws_cloudfront_distribution.this.arn]
+      values   = [aws_cloudfront_distribution.site.arn]
     }
   }
 }

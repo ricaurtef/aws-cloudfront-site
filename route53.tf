@@ -2,56 +2,56 @@
 # Route 53 DNS
 ############################
 
-resource "aws_route53_zone" "this" {
+resource "aws_route53_zone" "site" {
   name = var.domain_name
 }
 
 # Apex — A + AAAA alias to CloudFront
-resource "aws_route53_record" "this_apex_a" {
-  zone_id = aws_route53_zone.this.zone_id
+resource "aws_route53_record" "apex_a" {
+  zone_id = aws_route53_zone.site.zone_id
   name    = var.domain_name
   type    = "A"
 
   alias {
-    name                   = aws_cloudfront_distribution.this.domain_name
-    zone_id                = aws_cloudfront_distribution.this.hosted_zone_id
+    name                   = aws_cloudfront_distribution.site.domain_name
+    zone_id                = aws_cloudfront_distribution.site.hosted_zone_id
     evaluate_target_health = false
   }
 }
 
-resource "aws_route53_record" "this_apex_aaaa" {
-  zone_id = aws_route53_zone.this.zone_id
+resource "aws_route53_record" "apex_aaaa" {
+  zone_id = aws_route53_zone.site.zone_id
   name    = var.domain_name
   type    = "AAAA"
 
   alias {
-    name                   = aws_cloudfront_distribution.this.domain_name
-    zone_id                = aws_cloudfront_distribution.this.hosted_zone_id
+    name                   = aws_cloudfront_distribution.site.domain_name
+    zone_id                = aws_cloudfront_distribution.site.hosted_zone_id
     evaluate_target_health = false
   }
 }
 
 # www — A + AAAA alias to CloudFront (redirected by CloudFront Function)
-resource "aws_route53_record" "this_www_a" {
-  zone_id = aws_route53_zone.this.zone_id
+resource "aws_route53_record" "www_a" {
+  zone_id = aws_route53_zone.site.zone_id
   name    = "www.${var.domain_name}"
   type    = "A"
 
   alias {
-    name                   = aws_cloudfront_distribution.this.domain_name
-    zone_id                = aws_cloudfront_distribution.this.hosted_zone_id
+    name                   = aws_cloudfront_distribution.site.domain_name
+    zone_id                = aws_cloudfront_distribution.site.hosted_zone_id
     evaluate_target_health = false
   }
 }
 
-resource "aws_route53_record" "this_www_aaaa" {
-  zone_id = aws_route53_zone.this.zone_id
+resource "aws_route53_record" "www_aaaa" {
+  zone_id = aws_route53_zone.site.zone_id
   name    = "www.${var.domain_name}"
   type    = "AAAA"
 
   alias {
-    name                   = aws_cloudfront_distribution.this.domain_name
-    zone_id                = aws_cloudfront_distribution.this.hosted_zone_id
+    name                   = aws_cloudfront_distribution.site.domain_name
+    zone_id                = aws_cloudfront_distribution.site.hosted_zone_id
     evaluate_target_health = false
   }
 }
@@ -61,7 +61,7 @@ resource "aws_route53_record" "this_www_aaaa" {
 ############################
 
 resource "aws_route53_record" "google_verification" {
-  zone_id = aws_route53_zone.this.zone_id
+  zone_id = aws_route53_zone.site.zone_id
   name    = var.domain_name
   type    = "TXT"
   ttl     = 300

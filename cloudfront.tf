@@ -2,7 +2,7 @@
 # CloudFront Distribution
 ############################
 
-resource "aws_cloudfront_origin_access_control" "this" {
+resource "aws_cloudfront_origin_access_control" "site" {
   name                              = var.domain_name
   description                       = "OAC for ${var.domain_name}"
   origin_access_control_origin_type = "s3"
@@ -10,7 +10,7 @@ resource "aws_cloudfront_origin_access_control" "this" {
   signing_protocol                  = "sigv4"
 }
 
-resource "aws_cloudfront_distribution" "this" {
+resource "aws_cloudfront_distribution" "site" {
   enabled             = true
   is_ipv6_enabled     = true
   http_version        = "http3"
@@ -19,9 +19,9 @@ resource "aws_cloudfront_distribution" "this" {
   aliases             = [var.domain_name, "www.${var.domain_name}"]
 
   origin {
-    domain_name              = aws_s3_bucket.this_content.bucket_regional_domain_name
+    domain_name              = aws_s3_bucket.content.bucket_regional_domain_name
     origin_id                = "s3-content"
-    origin_access_control_id = aws_cloudfront_origin_access_control.this.id
+    origin_access_control_id = aws_cloudfront_origin_access_control.site.id
   }
 
   default_cache_behavior {
@@ -35,12 +35,12 @@ resource "aws_cloudfront_distribution" "this" {
 
     function_association {
       event_type   = "viewer-request"
-      function_arn = aws_cloudfront_function.this_redirect.arn
+      function_arn = aws_cloudfront_function.redirect.arn
     }
 
     function_association {
       event_type   = "viewer-response"
-      function_arn = aws_cloudfront_function.this_headers.arn
+      function_arn = aws_cloudfront_function.headers.arn
     }
   }
 
@@ -57,7 +57,7 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = aws_acm_certificate_validation.this.certificate_arn
+    acm_certificate_arn      = aws_acm_certificate_validation.site.certificate_arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
@@ -70,25 +70,25 @@ resource "aws_cloudfront_distribution" "this" {
 
   logging_config {
     include_cookies = false
-    bucket          = aws_s3_bucket.this_logs.bucket_domain_name
+    bucket          = aws_s3_bucket.logs.bucket_domain_name
     prefix          = "cloudfront/"
   }
 
-  depends_on = [aws_acm_certificate_validation.this]
+  depends_on = [aws_acm_certificate_validation.site]
 }
 
 ############################
 # CloudFront Functions
 ############################
 
-resource "aws_cloudfront_function" "this_redirect" {
+resource "aws_cloudfront_function" "redirect" {
   name    = "redirect-www"
   runtime = "cloudfront-js-2.0"
   publish = true
   code    = file("${path.module}/functions/redirect-www.js")
 }
 
-resource "aws_cloudfront_function" "this_headers" {
+resource "aws_cloudfront_function" "headers" {
   name    = "security-headers"
   runtime = "cloudfront-js-2.0"
   publish = true

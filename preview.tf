@@ -73,12 +73,12 @@ resource "aws_cloudfront_distribution" "preview" {
 
     function_association {
       event_type   = "viewer-request"
-      function_arn = aws_cloudfront_function.this_redirect.arn
+      function_arn = aws_cloudfront_function.redirect.arn
     }
 
     function_association {
       event_type   = "viewer-response"
-      function_arn = aws_cloudfront_function.this_headers.arn
+      function_arn = aws_cloudfront_function.headers.arn
     }
   }
 
@@ -95,7 +95,7 @@ resource "aws_cloudfront_distribution" "preview" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = aws_acm_certificate_validation.this.certificate_arn
+    acm_certificate_arn      = aws_acm_certificate_validation.site.certificate_arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
@@ -108,11 +108,11 @@ resource "aws_cloudfront_distribution" "preview" {
 
   logging_config {
     include_cookies = false
-    bucket          = aws_s3_bucket.this_logs.bucket_domain_name
+    bucket          = aws_s3_bucket.logs.bucket_domain_name
     prefix          = "preview/"
   }
 
-  depends_on = [aws_acm_certificate_validation.this]
+  depends_on = [aws_acm_certificate_validation.site]
 }
 
 ############################
@@ -120,7 +120,7 @@ resource "aws_cloudfront_distribution" "preview" {
 ############################
 
 resource "aws_route53_record" "preview_a" {
-  zone_id = aws_route53_zone.this.zone_id
+  zone_id = aws_route53_zone.site.zone_id
   name    = "preview.${var.domain_name}"
   type    = "A"
 
@@ -132,7 +132,7 @@ resource "aws_route53_record" "preview_a" {
 }
 
 resource "aws_route53_record" "preview_aaaa" {
-  zone_id = aws_route53_zone.this.zone_id
+  zone_id = aws_route53_zone.site.zone_id
   name    = "preview.${var.domain_name}"
   type    = "AAAA"
 
