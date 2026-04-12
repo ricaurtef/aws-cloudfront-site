@@ -19,3 +19,11 @@ google_site_verification = "google-site-verification=-ZffudtJxZqRKlZrY67G6odnVxW
 domain_name              = "ricaurtef.com"
 site_bucket_name         = "ricaurtef-site-content"
 preview_bucket_name      = "ricaurtef-site-preview"
+
+############################
+# Alerts
+############################
+
+sns_alerts_topic_name     = "cloudfront-alerts"
+alarm_request_threshold   = 10000
+lambda_log_retention_days = 14

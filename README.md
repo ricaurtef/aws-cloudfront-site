@@ -93,13 +93,15 @@ flowchart TD
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.14 |
+| <a name="requirement_archive"></a> [archive](#requirement\_archive) | ~> 2.7 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 6.27 |
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
+| <a name="provider_archive"></a> [archive](#provider\_archive) | 2.7.1 |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 6.39.0 |
 | <a name="provider_aws.management"></a> [aws.management](#provider\_aws.management) | 6.39.0 |
 | <a name="provider_aws.us_east_1"></a> [aws.us\_east\_1](#provider\_aws.us\_east\_1) | 6.39.0 |
@@ -109,21 +111,26 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
+| <a name="input_alarm_request_threshold"></a> [alarm\_request\_threshold](#input\_alarm\_request\_threshold) | Request count threshold per 5-minute period for the CloudFront request spike alarm. | `number` | n/a | yes |
 | <a name="input_deploy_role_arn"></a> [deploy\_role\_arn](#input\_deploy\_role\_arn) | ARN of the IAM role to assume for deploying resources (hub-and-spoke). | `string` | n/a | yes |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Apex domain name. | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Deployment environment (e.g., production, staging). | `string` | n/a | yes |
 | <a name="input_google_site_verification"></a> [google\_site\_verification](#input\_google\_site\_verification) | Google Search Console DNS verification token. | `string` | n/a | yes |
+| <a name="input_lambda_log_retention_days"></a> [lambda\_log\_retention\_days](#input\_lambda\_log\_retention\_days) | Number of days to retain CloudWatch logs for Lambda functions. | `number` | n/a | yes |
 | <a name="input_preview_bucket_name"></a> [preview\_bucket\_name](#input\_preview\_bucket\_name) | Name of the S3 bucket for preview site content. | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS region for primary resources. | `string` | n/a | yes |
 | <a name="input_site_bucket_name"></a> [site\_bucket\_name](#input\_site\_bucket\_name) | Name of the S3 bucket for site content. | `string` | n/a | yes |
+| <a name="input_sns_alerts_topic_name"></a> [sns\_alerts\_topic\_name](#input\_sns\_alerts\_topic\_name) | Name of the SNS topic for CloudFront alarm notifications. | `string` | n/a | yes |
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_cloudfront_distribution_id"></a> [cloudfront\_distribution\_id](#output\_cloudfront\_distribution\_id) | CloudFront distribution ID (used for cache invalidation). |
 | <a name="output_name_servers"></a> [name\_servers](#output\_name\_servers) | NS records to configure in the management account for DNS delegation. |
 | <a name="output_preview_cloudfront_distribution_id"></a> [preview\_cloudfront\_distribution\_id](#output\_preview\_cloudfront\_distribution\_id) | Preview CloudFront distribution ID (used for cache invalidation). |
 | <a name="output_preview_site_url"></a> [preview\_site\_url](#output\_preview\_site\_url) | Public URL of the preview site. |
 | <a name="output_site_url"></a> [site\_url](#output\_site\_url) | Public URL of the site. |
+| <a name="output_sns_topic_arn"></a> [sns\_topic\_arn](#output\_sns\_topic\_arn) | ARN of the SNS topic for CloudFront alarm notifications. |
+| <a name="output_telegram_notify_function_name"></a> [telegram\_notify\_function\_name](#output\_telegram\_notify\_function\_name) | Name of the Lambda function that sends Telegram notifications. |
 <!-- END_TF_DOCS -->
