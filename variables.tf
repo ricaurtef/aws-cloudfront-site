@@ -79,3 +79,47 @@ variable "preview_bucket_name" {
     error_message = "Must be a valid S3 bucket name (lowercase, 3-63 chars, no underscores)."
   }
 }
+
+############################
+# Alerts
+############################
+
+variable "powertools_layer_version" {
+  description = "Version number of the AWS Lambda Powertools Python layer (arm64)."
+  type        = number
+
+  validation {
+    condition     = var.powertools_layer_version > 0
+    error_message = "Must be a positive number."
+  }
+}
+
+variable "sns_alerts_topic_name" {
+  description = "Name of the SNS topic for CloudFront alarm notifications."
+  type        = string
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9_-]+$", var.sns_alerts_topic_name))
+    error_message = "Must contain only alphanumeric characters, hyphens, and underscores."
+  }
+}
+
+variable "alarm_request_threshold" {
+  description = "Request count threshold per 5-minute period for the CloudFront request spike alarm."
+  type        = number
+
+  validation {
+    condition     = var.alarm_request_threshold > 0
+    error_message = "Must be a positive number."
+  }
+}
+
+variable "lambda_log_retention_days" {
+  description = "Number of days to retain CloudWatch logs for Lambda functions."
+  type        = number
+
+  validation {
+    condition     = contains([1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1096, 1827, 2192, 2557, 2922, 3288, 3653], var.lambda_log_retention_days)
+    error_message = "Must be a valid CloudWatch log retention value."
+  }
+}

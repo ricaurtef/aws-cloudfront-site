@@ -38,3 +38,17 @@ output "preview_site_url" {
   description = "Public URL of the preview site."
   value       = "https://preview.${var.domain_name}"
 }
+
+############################
+# Alerts
+############################
+
+output "sns_topic_arn" {
+  description = "ARN of the SNS topic for CloudFront alarm notifications."
+  value       = aws_sns_topic.alerts.arn
+}
+
+output "telegram_notify_function_name" {
+  description = "Name of the Lambda function that sends Telegram notifications."
+  value       = aws_lambda_function.telegram_notify.function_name
+}

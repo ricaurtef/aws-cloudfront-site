@@ -8,5 +8,10 @@ terraform.tfstate*
 # Terraform lock file (recreated on the runner)
 .terraform.lock.hcl
 
+# Lambda build artifacts
+functions/telegram-notify/lambda_function.zip
+
 # Claude Code
 CLAUDE.md
+PRD.md
+PROGRESS.md

@@ -44,3 +44,33 @@ skip-check:
 
   - CKV2_AWS_38 # DNSSEC requires a KMS key in us-east-1 — overkill for a personal site.
   - CKV2_AWS_39 # DNS query logging requires CloudWatch log group — unnecessary for personal site.
+
+  ############################
+  # Lambda
+  ############################
+
+  - CKV_AWS_50  # X-Ray: simple notification function, tracing adds no value.
+  - CKV_AWS_115 # Concurrency limit: alarm-triggered with minimal invocations.
+  - CKV_AWS_116 # DLQ: alert delivery is best-effort; next alarm evaluation retriggers.
+  - CKV_AWS_117 # VPC: Lambda calls Telegram API — VPC would require NAT Gateway.
+  - CKV_AWS_173 # Env var KMS: variables only hold SSM paths, not secrets.
+  - CKV_AWS_272 # Code signing: code is in the same repo, personal project.
+
+  ############################
+  # SNS
+  ############################
+
+  - CKV_AWS_26  # Encryption: alarm metadata (error rates, request counts) is not sensitive.
+
+  ############################
+  # SSM
+  ############################
+
+  - CKV_AWS_337 # KMS CMK: default aws/ssm key is sufficient for a personal project.
+
+  ############################
+  # CloudWatch Logs
+  ############################
+
+  - CKV_AWS_158 # KMS: notification logs are not sensitive data.
+  - CKV_AWS_338 # Retention: 14 days is sufficient for notification logs.

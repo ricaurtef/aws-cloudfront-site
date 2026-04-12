@@ -1,4 +1,61 @@
 ############################
+# Archive — Lambda Packages
+############################
+
+data "archive_file" "telegram_notify" {
+  type        = "zip"
+  source_file = "${path.module}/functions/telegram-notify/lambda_function.py"
+  output_path = "${path.module}/functions/telegram-notify/lambda_function.zip"
+}
+
+############################
+# IAM Policy Documents — Telegram Notify
+############################
+
+data "aws_iam_policy_document" "telegram_notify_assume" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "telegram_notify" {
+  statement {
+    sid = "CloudWatchLogs"
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+    resources = ["${aws_cloudwatch_log_group.telegram_notify.arn}:*"]
+  }
+
+  statement {
+    sid     = "SSMGetParameters"
+    actions = ["ssm:GetParameter"]
+    resources = [
+      aws_ssm_parameter.telegram_bot_token.arn,
+      aws_ssm_parameter.telegram_chat_id.arn,
+    ]
+  }
+
+  statement {
+    sid       = "KMSDecrypt"
+    actions   = ["kms:Decrypt"]
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values   = ["ssm.us-east-1.amazonaws.com"]
+    }
+  }
+}
+
+############################
 # IAM Policy Documents — Preview
 ############################
 
