@@ -120,7 +120,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          path: tfplan
+          path: |
+            tfplan
+            functions/telegram-notify/lambda_function.zip
 
   deploy:
     name: Deploy
