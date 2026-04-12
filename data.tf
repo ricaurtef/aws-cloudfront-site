@@ -9,11 +9,12 @@ data "archive_file" "telegram_notify" {
 }
 
 ############################
-# SSM — Powertools Layer
+# Lambda — Powertools Layer
 ############################
 
-data "aws_ssm_parameter" "powertools_layer_arn" {
-  name = "/aws/service/powertools/python/arm64/3.14/latest"
+data "aws_lambda_layer_version" "powertools" {
+  layer_name         = "arn:aws:lambda:us-east-1:017000801446:layer:AWSLambdaPowertoolsPythonV3-python314-arm64"
+  compatible_runtime = "python3.14"
 }
 
 ############################
