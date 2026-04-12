@@ -84,6 +84,16 @@ variable "preview_bucket_name" {
 # Alerts
 ############################
 
+variable "powertools_layer_version" {
+  description = "Version number of the AWS Lambda Powertools Python layer (arm64)."
+  type        = number
+
+  validation {
+    condition     = var.powertools_layer_version > 0
+    error_message = "Must be a positive number."
+  }
+}
+
 variable "sns_alerts_topic_name" {
   description = "Name of the SNS topic for CloudFront alarm notifications."
   type        = string

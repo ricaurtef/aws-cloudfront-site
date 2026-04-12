@@ -210,7 +210,7 @@ resource "aws_lambda_function" "telegram_notify" {
   filename         = data.archive_file.telegram_notify.output_path
   source_code_hash = data.archive_file.telegram_notify.output_base64sha256
 
-  layers = [data.aws_lambda_layer_version.powertools.arn]
+  layers = ["arn:aws:lambda:${var.region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python314-arm64:${var.powertools_layer_version}"]
 
   environment {
     variables = {

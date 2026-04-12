@@ -118,6 +118,7 @@ No modules.
 | <a name="input_environment"></a> [environment](#input\_environment) | Deployment environment (e.g., production, staging). | `string` | n/a | yes |
 | <a name="input_google_site_verification"></a> [google\_site\_verification](#input\_google\_site\_verification) | Google Search Console DNS verification token. | `string` | n/a | yes |
 | <a name="input_lambda_log_retention_days"></a> [lambda\_log\_retention\_days](#input\_lambda\_log\_retention\_days) | Number of days to retain CloudWatch logs for Lambda functions. | `number` | n/a | yes |
+| <a name="input_powertools_layer_version"></a> [powertools\_layer\_version](#input\_powertools\_layer\_version) | Version number of the AWS Lambda Powertools Python layer (arm64). | `number` | n/a | yes |
 | <a name="input_preview_bucket_name"></a> [preview\_bucket\_name](#input\_preview\_bucket\_name) | Name of the S3 bucket for preview site content. | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS region for primary resources. | `string` | n/a | yes |
 | <a name="input_site_bucket_name"></a> [site\_bucket\_name](#input\_site\_bucket\_name) | Name of the S3 bucket for site content. | `string` | n/a | yes |

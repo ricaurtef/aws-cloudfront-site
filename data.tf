@@ -9,15 +9,6 @@ data "archive_file" "telegram_notify" {
 }
 
 ############################
-# Lambda — Powertools Layer
-############################
-
-data "aws_lambda_layer_version" "powertools" {
-  layer_name         = "arn:aws:lambda:us-east-1:017000801446:layer:AWSLambdaPowertoolsPythonV3-python314-arm64"
-  compatible_runtime = "python3.14"
-}
-
-############################
 # IAM Policy Documents — Telegram Notify
 ############################
 
