@@ -11,6 +11,11 @@ terraform.tfstate*
 # Lambda build artifacts
 functions/telegram-notify/lambda_function.zip
 
+# Python
+**/.venv/
+**/__pycache__/
+**/.pytest_cache/
+
 # Claude Code
 CLAUDE.md
 PRD.md

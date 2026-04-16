@@ -1,0 +1,13 @@
+{
+  "Records": [
+    {
+      "EventSource": "aws:sns",
+      "Sns": {
+        "Type": "Notification",
+        "TopicArn": "arn:aws:sns:us-east-1:839765241276:cloudfront-alerts",
+        "Subject": "ALARM: \"cloudfront-5xx-error-rate\" in US East (N. Virginia)",
+        "Message": "{\"AlarmName\":\"cloudfront-5xx-error-rate\",\"AlarmArn\":\"arn:aws:cloudwatch:us-east-1:839765241276:alarm:cloudfront-5xx-error-rate\",\"AWSAccountId\":\"839765241276\",\"NewStateValue\":\"ALARM\",\"OldStateValue\":\"OK\",\"NewStateReason\":\"Threshold Crossed: 1 out of the last 2 datapoints [12.5 (16/04/26 20:45:00)] was greater than or equal to the threshold (5.0).\",\"StateChangeTime\":\"2026-04-16T20:45:00.000+0000\",\"Region\":\"US East (N. Virginia)\",\"Trigger\":{\"Namespace\":\"AWS/CloudFront\",\"MetricName\":\"5xxErrorRate\",\"Statistic\":\"Average\",\"ComparisonOperator\":\"GreaterThanOrEqualToThreshold\",\"Threshold\":5.0,\"Period\":300,\"EvaluationPeriods\":2,\"Dimensions\":[{\"name\":\"DistributionId\",\"value\":\"E1LZMGRHP4KV06\"},{\"name\":\"Region\",\"value\":\"Global\"}]}}"
+      }
+    }
+  ]
+}

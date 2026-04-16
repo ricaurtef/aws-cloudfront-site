@@ -1,0 +1,13 @@
+{
+  "Records": [
+    {
+      "EventSource": "aws:sns",
+      "Sns": {
+        "Type": "Notification",
+        "TopicArn": "arn:aws:sns:us-east-1:839765241276:cloudfront-alerts",
+        "Subject": "OK: \"cloudfront-4xx-error-rate\" in US East (N. Virginia)",
+        "Message": "{\"AlarmName\":\"cloudfront-4xx-error-rate\",\"AlarmArn\":\"arn:aws:cloudwatch:us-east-1:839765241276:alarm:cloudfront-4xx-error-rate\",\"AWSAccountId\":\"839765241276\",\"NewStateValue\":\"OK\",\"OldStateValue\":\"ALARM\",\"NewStateReason\":\"Threshold Crossed: no datapoints were found in violation of the threshold.\",\"StateChangeTime\":\"2026-04-16T21:00:00.000+0000\",\"Region\":\"US East (N. Virginia)\",\"Trigger\":{\"ComparisonOperator\":\"GreaterThanOrEqualToThreshold\",\"Threshold\":15.0,\"EvaluationPeriods\":2,\"Metrics\":[{\"Id\":\"requests\",\"ReturnData\":false,\"MetricStat\":{\"Metric\":{\"Namespace\":\"AWS/CloudFront\",\"MetricName\":\"Requests\"},\"Stat\":\"Sum\",\"Period\":300}},{\"Id\":\"error_rate\",\"ReturnData\":false,\"MetricStat\":{\"Metric\":{\"Namespace\":\"AWS/CloudFront\",\"MetricName\":\"4xxErrorRate\"},\"Stat\":\"Average\",\"Period\":300}},{\"Id\":\"gated_error_rate\",\"ReturnData\":true,\"Expression\":\"IF(requests >= 100, error_rate)\",\"Label\":\"4xx error rate (gated on minimum requests)\"}]}}"
+      }
+    }
+  ]
+}
