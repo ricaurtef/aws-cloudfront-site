@@ -116,19 +116,54 @@ resource "aws_cloudwatch_metric_alarm" "error_5xx" {
 
 resource "aws_cloudwatch_metric_alarm" "error_4xx" {
   alarm_name          = "cloudfront-4xx-error-rate"
-  alarm_description   = "CloudFront 4xx error rate >= 15% for 10 minutes."
-  namespace           = "AWS/CloudFront"
-  metric_name         = "4xxErrorRate"
-  statistic           = "Average"
+  alarm_description   = <<-EOT
+    CloudFront 4xx error rate >= 15% for 10 minutes, gated on >= ${var.alarm_4xx_min_requests}
+    requests per period to ignore scanner noise on low-traffic windows.
+  EOT
   comparison_operator = "GreaterThanOrEqualToThreshold"
   threshold           = 15
-  period              = 300
   evaluation_periods  = 2
   treat_missing_data  = "notBreaching"
 
-  dimensions = {
-    DistributionId = aws_cloudfront_distribution.site.id
-    Region         = "Global"
+  metric_query {
+    id          = "requests"
+    return_data = false
+
+    metric {
+      namespace   = "AWS/CloudFront"
+      metric_name = "Requests"
+      stat        = "Sum"
+      period      = 300
+
+      dimensions = {
+        DistributionId = aws_cloudfront_distribution.site.id
+        Region         = "Global"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "error_rate"
+    return_data = false
+
+    metric {
+      namespace   = "AWS/CloudFront"
+      metric_name = "4xxErrorRate"
+      stat        = "Average"
+      period      = 300
+
+      dimensions = {
+        DistributionId = aws_cloudfront_distribution.site.id
+        Region         = "Global"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "gated_error_rate"
+    expression  = "IF(requests >= ${var.alarm_4xx_min_requests}, error_rate)"
+    label       = "4xx error rate (gated on minimum requests)"
+    return_data = true
   }
 
   alarm_actions = [aws_sns_topic.alerts.arn]

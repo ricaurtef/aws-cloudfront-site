@@ -27,4 +27,5 @@ preview_bucket_name      = "ricaurtef-site-preview"
 powertools_layer_version  = 30
 sns_alerts_topic_name     = "cloudfront-alerts"
 alarm_request_threshold   = 10000
+alarm_4xx_min_requests    = 100
 lambda_log_retention_days = 14

@@ -112,6 +112,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
+| <a name="input_alarm_4xx_min_requests"></a> [alarm\_4xx\_min\_requests](#input\_alarm\_4xx\_min\_requests) | Minimum total requests per 5-minute period before the CloudFront 4xx error-rate alarm evaluates.<br/>Prevents scanner 404s from pegging the ratio on low-traffic windows. | `number` | n/a | yes |
 | <a name="input_alarm_request_threshold"></a> [alarm\_request\_threshold](#input\_alarm\_request\_threshold) | Request count threshold per 5-minute period for the CloudFront request spike alarm. | `number` | n/a | yes |
 | <a name="input_deploy_role_arn"></a> [deploy\_role\_arn](#input\_deploy\_role\_arn) | ARN of the IAM role to assume for deploying resources (hub-and-spoke). | `string` | n/a | yes |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Apex domain name. | `string` | n/a | yes |
