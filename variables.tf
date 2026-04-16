@@ -114,6 +114,19 @@ variable "alarm_request_threshold" {
   }
 }
 
+variable "alarm_4xx_min_requests" {
+  description = <<-EOT
+    Minimum total requests per 5-minute period before the CloudFront 4xx error-rate alarm evaluates.
+    Prevents scanner 404s from pegging the ratio on low-traffic windows.
+  EOT
+  type        = number
+
+  validation {
+    condition     = var.alarm_4xx_min_requests > 0
+    error_message = "Must be a positive number."
+  }
+}
+
 variable "lambda_log_retention_days" {
   description = "Number of days to retain CloudWatch logs for Lambda functions."
   type        = number
