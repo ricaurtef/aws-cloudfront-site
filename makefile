@@ -6,19 +6,21 @@ define USAGE
 Usage: make TARGET_NAME
 
 Targets:
-  check       Check Terraform code formatting.
-  checkov     Run Checkov security scan.
-  chores      Run all maintenance tasks (check, document, format).
-  document    Generate documentation for Terraform code.
-  format      Format Terraform code.
-  security    Run security scans (Checkov, Trivy).
-  setup       Initialize the development environment.
-  test        Run Terraform tests.
-  tflint      Run TFLint to analyze Terraform code for potential issues.
-  tflint_fix  Run TFLint with auto-fix (review changes before committing).
-  trivy       Run Trivy security scan.
-  validate    Validate Terraform configuration.
-  help        Display this help message.
+  check             Check Terraform code formatting.
+  checkov           Run Checkov security scan.
+  chores            Run all maintenance tasks (check, document, format).
+  document          Generate documentation for Terraform code.
+  format            Format Terraform code.
+  security          Run security scans (Checkov, Trivy).
+  setup             Initialize the development environment.
+  test              Run Terraform tests.
+  test-lambda       Run the telegram-notify unit tests (offline, fast).
+  test-lambda-live  Run live integration tests against the deployed Lambda (fires Telegram messages).
+  tflint            Run TFLint to analyze Terraform code for potential issues.
+  tflint_fix        Run TFLint with auto-fix (review changes before committing).
+  trivy             Run Trivy security scan.
+  validate          Validate Terraform configuration.
+  help              Display this help message.
 endef
 
 .PHONY: help
@@ -57,18 +59,30 @@ trivy:
 
 .PHONY: setup
 setup:
-	@for tool in terraform terraform-docs tflint checkov trivy pre-commit; do \
+	@for tool in terraform terraform-docs tflint checkov trivy pre-commit uv; do \
 		command -v $$tool >/dev/null 2>&1 || { printf "Error: '$$tool' not found. See README.md for installation instructions.\n"; exit 1; }; \
 	done
 	@echo "Initializing development environment..."
 	@pre-commit install --config .config/pre-commit-config.yml
 	@tflint --init --config .config/tflint.hcl
 	@terraform init -backend=false
+	@uv sync --project functions/telegram-notify
 
 .PHONY: test
 test:
 	@echo "Running Terraform tests..."
 	# terraform test
+
+.PHONY: test-lambda
+test-lambda:
+	@echo "Running Lambda tests (unit only)..."
+	cd functions/telegram-notify && uv run pytest
+
+.PHONY: test-lambda-live
+test-lambda-live:
+	@echo "Running Lambda live tests — will fire real Telegram messages tagged [TEST EVENT]..."
+	@echo "AWS profile: $${AWS_PROFILE:-prod_ricaurtef} (override via AWS_PROFILE env var)."
+	cd functions/telegram-notify && AWS_PROFILE=$${AWS_PROFILE:-prod_ricaurtef} uv run pytest -m live
 
 .PHONY: tflint
 tflint:

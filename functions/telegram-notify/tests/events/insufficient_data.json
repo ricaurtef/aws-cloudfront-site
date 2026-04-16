@@ -1,0 +1,13 @@
+{
+  "Records": [
+    {
+      "EventSource": "aws:sns",
+      "Sns": {
+        "Type": "Notification",
+        "TopicArn": "arn:aws:sns:us-east-1:839765241276:cloudfront-alerts",
+        "Subject": "INSUFFICIENT_DATA: \"cloudfront-request-spike\" in US East (N. Virginia)",
+        "Message": "{\"AlarmName\":\"cloudfront-request-spike\",\"AlarmArn\":\"arn:aws:cloudwatch:us-east-1:839765241276:alarm:cloudfront-request-spike\",\"AWSAccountId\":\"839765241276\",\"NewStateValue\":\"INSUFFICIENT_DATA\",\"OldStateValue\":\"OK\",\"NewStateReason\":\"Insufficient Data: 1 datapoint was unknown.\",\"StateChangeTime\":\"2026-04-16T20:45:00.000+0000\",\"Region\":\"US East (N. Virginia)\",\"Trigger\":{\"Namespace\":\"AWS/CloudFront\",\"MetricName\":\"Requests\",\"Statistic\":\"Sum\",\"ComparisonOperator\":\"GreaterThanOrEqualToThreshold\",\"Threshold\":10000.0,\"Period\":300,\"EvaluationPeriods\":1,\"Dimensions\":[{\"name\":\"DistributionId\",\"value\":\"E1LZMGRHP4KV06\"},{\"name\":\"Region\",\"value\":\"Global\"}]}}"
+      }
+    }
+  ]
+}
